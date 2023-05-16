@@ -63,7 +63,8 @@ smithroot_process <- function(x,longform=FALSE){
   #simple output
   if(!longform){
     
-    out <- data.frame(date=date_val,
+    out <- data.frame(file=x,
+                      date=date_val,
                       longitude=location$Longitude,
                       latitude=location$Latitude,
                       duration = data_dim[grepl("Duration",data_dim[,1]),2],
@@ -78,7 +79,8 @@ smithroot_process <- function(x,longform=FALSE){
   
   if(longform){
     
-    out <- data_df #this could have erroneous dates
+    out <- data_df%>% #this could still have erroneous dates
+           mutate(file=x)
     
   }
   
