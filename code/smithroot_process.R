@@ -25,6 +25,13 @@ smithroot_process <- function(x,longform=FALSE){
   date_check <- !is.null(data_dim[grepl("Start Time",data_dim[,1]),3])
   
   #location of the sample taken as the centriod of the recorded coordinates
+  
+  if(sum(data_df$Latitude == 0) == nrow(data_df)){
+    
+    location <- data.frame(Longitude = NA,Latitude = NA)
+    
+  } else {
+  
   location <- data_df%>%
               filter(abs(Longitude)>0,abs(Latitude)>0)%>%
               st_as_sf(coords=c("Longitude","Latitude"),crs=latlong)%>%
@@ -34,6 +41,7 @@ smithroot_process <- function(x,longform=FALSE){
                      Latitude = st_coordinates(.)[,2])%>%
               data.frame()%>%
               dplyr::select(Longitude,Latitude)
+  }
   
   #extract date
   if(!date_check){date_val <- mean(as.POSIXct(data_df$Date),na.rm=TRUE)} #taken as the mean time of sampling
