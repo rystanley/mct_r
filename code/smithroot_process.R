@@ -26,6 +26,7 @@ smithroot_process <- function(x,longform=FALSE){
   
   #location of the sample taken as the centriod of the recorded coordinates
   location <- data_df%>%
+              filter(abs(Longitude)>0,abs(Latitude)>0)%>%
               st_as_sf(coords=c("Longitude","Latitude"),crs=latlong)%>%
               summarise(st_union(geometry))%>%
               st_centroid()%>%
